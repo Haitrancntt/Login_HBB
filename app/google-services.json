@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "300489950570",
+    "project_id": "hbb-app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300489950570:android:db1e607451677e71",
+        "android_client_info": {
+          "package_name": "com.example.haitr.login_hbb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "300489950570-2eo5htcqn4426ocbb2ej3qugekc7jgtr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.haitr.login_hbb",
+            "certificate_hash": "67AF7C77B2FA48A1F98BA956625CB7F459B5024E"
+          }
+        },
+        {
+          "client_id": "300489950570-0bi8mqi54d3qgir710vtp26062p5bmkc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHFMSwe8poprlJe3X8c1YYD6mtdLtIyG0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Login_HBB</string>
+    // form login
+    <string name="button_signin"> Sign in</string>
+    <string name="edittext_login_username">Username</string>
+    <string name="edittext_login_pass">Password</string>
+    <string name="textview_register">or register ?</string>
+
+    // form register
+    <string name="edittext_register_email">Email</string>
+    <string name="edittext_register_username">Username</string>
+    <string name="edittext_register_phonenumber">Phone number</string>
+    <string name="edittext_register_pass">Password</string>
+    <string name="edittext_register_repeatpass">Repeat password</string>
+    <string name="button_create_account">Create account</string>
+
+    //facebook appid
+    <string name="app_id">1110128735746021</string>
+
+</resources>
