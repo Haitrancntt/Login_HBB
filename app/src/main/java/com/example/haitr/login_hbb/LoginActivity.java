@@ -7,8 +7,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -19,22 +27,82 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import Class.Account_Facebook;
+
+import java.util.Arrays;
+
 public class LoginActivity extends AppCompatActivity {
-    CallbackManager callbackManager;
+
     private TextView txtRegister;
+    //login google
     private GoogleSignInOptions gso;
     private GoogleApiClient mGoogleApiClient;
     private SignInButton btnGoogle;
     // request code for gmail sign in
     private int RC_SIGN_IN = 9001;
 
+    // login facebook
+    private CallbackManager callbackManager;
+    private LoginButton loginButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
+
+        loginButton = (LoginButton) findViewById(R.id.fb_login_button);
         txtRegister = (TextView) findViewById(R.id.textview_register);
         callbackManager = new CallbackManager.Factory().create();
+        //set permissions for app
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday"));
+        //button facebook listener
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                final AccessToken accessToken = loginResult.getAccessToken();
+                final Profile profile = Profile.getCurrentProfile();
+
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Account_Facebook account_facebook = new Account_Facebook();
+                        try {
+                            Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                            account_facebook.setName(object.getString("name"));
+                            account_facebook.setEmail(object.getString("email"));
+                            account_facebook.setGender(object.getString("gender"));
+                            account_facebook.setBirthday(object.getString("birthday"));
+                            account_facebook.setId(object.getString("id"));
+                            intent.putExtra("profile", account_facebook);
+                            startActivity(intent);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+
+        // button google listener
         btnGoogle = (SignInButton) findViewById(R.id.button_google);
         gmailInitialize();
         btnGoogle.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    // textview register listener
     public void textview_Register(View view) {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
@@ -84,6 +153,8 @@ public class LoginActivity extends AppCompatActivity {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
+
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
