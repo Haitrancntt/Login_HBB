@@ -22,10 +22,12 @@
             android:layout_alignParentLeft="true" />
 
         <com.google.android.gms.common.SignInButton
-            android:id="@+id/gg_login_button"
+            android:id="@+id/button_google"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"></com.google.android.gms.common.SignInButton>
+            android:layout_alignParentRight="true"/>
+           -- android:onClick="btnGoogle_Click"
+            />
     </RelativeLayout>
 
     <View style="@style/Divider" />
