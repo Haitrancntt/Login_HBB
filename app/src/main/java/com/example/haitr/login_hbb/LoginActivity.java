@@ -42,8 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
     private SignInButton btnGoogle;
     // request code for gmail sign in
-    private int RC_SIGN_IN = 9001;
-
+    private int RC_SIGN_IN_GMAIL = 1;
     // login facebook
     private CallbackManager callbackManager;
     private LoginButton loginButton;
@@ -53,19 +52,18 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
-
-        loginButton = (LoginButton) findViewById(R.id.fb_login_button);
-        txtRegister = (TextView) findViewById(R.id.textview_register);
-        callbackManager = new CallbackManager.Factory().create();
-        //set permissions for app
+        // Initialize UI
+        loadUI();
+        //set permissions for app to take facebook profile information
         loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday"));
+        // button google listener
+        gmailInitialize();
         //button facebook listener
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 final AccessToken accessToken = loginResult.getAccessToken();
                 final Profile profile = Profile.getCurrentProfile();
-
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
@@ -84,7 +82,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,name,email,gender,birthday");
                 request.setParameters(parameters);
@@ -101,16 +98,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
-        // button google listener
-        btnGoogle = (SignInButton) findViewById(R.id.button_google);
-        gmailInitialize();
-        btnGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signIn_Gmail();
-            }
-        });
     }
 
     // textview register listener
@@ -119,7 +106,12 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // Initial gmail sign in method
+    // button google click
+    private void btnGoogle_Click(View view) {
+        signIn_Gmail();
+    }
+
+    // Initialize gmail sign in method
     private void gmailInitialize() {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -137,27 +129,33 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-   /* private void btnGoogle_Click(View view) {
-        signIn_Gmail();
-    }*/
-
-    private void signIn_Gmail() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+    // Initialize UI
+    private void loadUI() {
+        loginButton = (LoginButton) findViewById(R.id.fb_login_button);
+        txtRegister = (TextView) findViewById(R.id.textview_register);
+        btnGoogle = (SignInButton) findViewById(R.id.button_google);
+        callbackManager = new CallbackManager.Factory().create();
     }
 
+    // Start gmail sign-in
+    private void signIn_Gmail() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN_GMAIL);
+    }
+
+    //Receive result from Gmail sign-in or Facebook sign-in
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN_GMAIL) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
+            handleGmailSignInResult(result);
+        } else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
         }
-
-        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
+    /*@Override
     protected void onStart() {
         super.onStart();
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
@@ -165,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
             // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
             // and the GoogleSignInResult will be available instantly.
             GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
+            handleGmailSignInResult(result);
         } else {
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
@@ -173,13 +171,14 @@ public class LoginActivity extends AppCompatActivity {
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
-                    handleSignInResult(googleSignInResult);
+                    handleGmailSignInResult(googleSignInResult);
                 }
             });
         }
-    }
+    }*/
 
-    private void handleSignInResult(GoogleSignInResult result) {
+    // Do it when sign-in is success
+    private void handleGmailSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
