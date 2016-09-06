@@ -10,10 +10,7 @@ import com.facebook.login.widget.ProfilePictureView;
 
 import Class.Account_Facebook;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-public class ProfileActivity extends AppCompatActivity {
+public class AccountFbActivity extends AppCompatActivity {
     private TextView txtuserName, txtuserEmail, txtuserGender, txtuserBirthday;
     private ProfilePictureView profilePictureView;
     private LoginButton loginButton;
@@ -21,7 +18,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_account_facebook);
         txtuserEmail = (TextView) findViewById(R.id.txtEmail);
         txtuserName = (TextView) findViewById(R.id.txtName);
         txtuserGender = (TextView) findViewById(R.id.txtGender);

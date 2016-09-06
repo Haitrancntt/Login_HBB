@@ -32,7 +32,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.haitr.login_hbb.MainActivity" />
         </activity>
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".AccountFbActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.haitr.login_hbb.MainActivity" />
+        </activity>
         <activity android:name=".RegisterActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

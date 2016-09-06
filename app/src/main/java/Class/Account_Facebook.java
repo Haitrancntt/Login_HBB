@@ -1,5 +1,7 @@
 package Class;
 
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**

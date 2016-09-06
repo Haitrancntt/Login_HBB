@@ -69,7 +69,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:clickable="true"
-            android:onClick="textview_Register"
+            android:onClick="textViewRegister_Click"
             android:text="@string/textview_register"
             android:textColor="@color/color_register" />
     </LinearLayout>
