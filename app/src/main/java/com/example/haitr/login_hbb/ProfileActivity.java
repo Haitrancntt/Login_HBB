@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 
 import Class.Account_Facebook;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 public class ProfileActivity extends AppCompatActivity {
     private TextView txtuserName, txtuserEmail, txtuserGender, txtuserBirthday;
     private ProfilePictureView profilePictureView;
+    private LoginButton loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class ProfileActivity extends AppCompatActivity {
         txtuserName = (TextView) findViewById(R.id.txtName);
         txtuserGender = (TextView) findViewById(R.id.txtGender);
         txtuserBirthday = (TextView) findViewById(R.id.txtBirthday);
+        loginButton = (LoginButton) findViewById(R.id.fb_logout);
         profilePictureView = (ProfilePictureView) findViewById(R.id.profilepicture);
         Account_Facebook account_facebook;
         Intent intent = getIntent();
@@ -34,16 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
         txtuserBirthday.setText(account_facebook.getBirthday());
         profilePictureView.setPresetSize(ProfilePictureView.NORMAL);
         profilePictureView.setProfileId(account_facebook.getId());
-        //txtuserName.setText(account_facebook.ToString());
 
     }
 
-   /* public void setProfile(JSONObject jsonObject) {
-        try {
-            txtuserName.setText(jsonObject.getString("name"));
-            txtuserEmail.setText(jsonObject.getString("email"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }*/
 }
