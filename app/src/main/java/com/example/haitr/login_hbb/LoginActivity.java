@@ -72,11 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                         Account_Facebook account_facebook = new Account_Facebook();
                         try {
                             Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
-                            account_facebook.setName(object.getString("name"));
-                            account_facebook.setEmail(object.getString("email"));
-                            account_facebook.setGender(object.getString("gender"));
-                            account_facebook.setBirthday(object.getString("birthday"));
-                            account_facebook.setId(object.getString("id"));
+                            GetUserProfile(account_facebook, object);
                             intent.putExtra("profile", account_facebook);
                             startActivity(intent);
                         } catch (JSONException e) {
@@ -103,6 +99,16 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    // Get user profile with permissons
+    public void GetUserProfile(Account_Facebook account_facebook, JSONObject object) throws JSONException {
+        account_facebook.setName(object.getString("name"));
+        account_facebook.setEmail(object.getString("email"));
+        account_facebook.setGender(object.getString("gender"));
+        account_facebook.setBirthday(object.getString("birthday"));
+        account_facebook.setId(object.getString("id"));
+    }
+
+    //Load UI map from XML file
     private void loadUI() {
         loginButton = (LoginButton) findViewById(R.id.fb_login_button);
         txtRegister = (TextView) findViewById(R.id.textview_register);
